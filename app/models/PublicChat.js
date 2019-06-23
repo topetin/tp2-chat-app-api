@@ -1,55 +1,43 @@
-const fs = require('fs')
-
-const roomsPath = './app/data/rooms.json'
-
 class PublicChat {
     constructor(room, user) {
         this.room = room
         this.users = []
-        this.token = null
-        this.addUser(user)
-    }
-
-    addChatRoom() {
-        if (this.isRoomAvailable(this.room)) {
-            this.token = this.generateId().toString()
-            const chatRooms = this.getRooms()
-            chatRooms.push(this)
-            fs.writeFile(roomsPath, JSON.stringify(chatRooms), (err, result) => {
-                if (err) console.log('error', err)
-            })
-        } else {
-            throw new Error('Room is taken')
-        }
-    }
-
-    addUser(user) {
         this.users.push(user)
+        this.token = null
+        this.messages = []
     }
 
-    getRooms() {
-        try {
-            return JSON.parse(fs.readFileSync(roomsPath))
-        } catch(e) {
-            return []
-        }
+    getRoom() {
+        return this.room
     }
 
-    isRoomAvailable(room) {
-        const rooms = this.getRooms()
-        const roomExists = rooms.find((r) => r.room === room)
-        return roomExists ? false : true
+    setRoom(room) {
+        this.room = room
     }
 
-    generateId() {
-        return Math.round(Math.random() * (100000000000000- 0) + 0)
+    getUsers() {
+        return this.users
     }
 
-    // joinUser() {
-    //     const rooms = this.getRooms()
-    //     const room = rooms.find
-    // }
+    setUsers(user) {
+        this.users = user
+    }
 
+    getToken() {
+        return this.token
+    }
+
+    setToken(token) {
+        this.token = token
+    }
+
+    getPublicChat() {
+        return this
+    }
+
+    getMessages() {
+        return this.messages
+    }
 }
 
 module.exports = PublicChat

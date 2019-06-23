@@ -7,12 +7,8 @@ router = module.exports = new express.Router()
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({extended: true}))
 
-router.get('/createQuickRoom', quickRoom.home)
-
-router.post('/quickRoom', quickRoom.createRoom)
-
-router.get('/room', quickRoom.getRoom)
-
-router.post('/chatRoom', quickRoom.enterRoom)
+router.post('/createQuickRoom', quickRoom.createRoom)
+router.post('/joinQuickRoom', quickRoom.joinRoom)
+router.get('/getRoomByToken', quickRoom.getRoomByToken)
 
 module.exports = router

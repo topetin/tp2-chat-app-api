@@ -3,7 +3,7 @@ const path = require('path')
 const http = require('http')
 const socketio = require('socket.io')
 const cors = require('cors')
-const quickRoomValidator = require('./app/utils/public-room-validator')
+const roomsHandler = require('./app/utils/public-room-handler')
 
 // const userRouter = require('./app/routes/userRouter')
 // const loginRouter = require('./app/routes/loginRouter')
@@ -31,15 +31,17 @@ quickRoomChat.on('connection', (socket) => {
         socket.room = joinData.room
         socket.join(joinData.room)
         io.of('/quickRoom').to(joinData.room).emit('new-member', {room: joinData.room, user: joinData.user})
+        socket.emit('previous-messages', {messages: roomsHandler.getMessages(joinData.room)})
     })
 
     socket.on('new-message', (data) => {
         io.of('/quickRoom').to(data.room).emit('new-message', data.message)
+        roomsHandler.addMessage(data.room, data.message)
     })
 
     socket.on('disconnect', function(){
         io.of('/quickRoom').to(socket.room).emit('member-disconnected', socket.user)
-        quickRoomValidator.removeUser(socket.room, socket.user)
+        roomsHandler.removeUser(socket.room, socket.user)
         console.log('user disconnected')
     })
 

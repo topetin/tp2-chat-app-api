@@ -1,0 +1,37 @@
+[
+    {
+        "room": "mari",
+        "users": [
+            "aaa"
+        ],
+        "token": "2363733286220",
+        "messages": [
+            "aaaaa",
+            "aaa"
+        ]
+    },
+    {
+        "room": "gordis",
+        "users": [
+            "ggg"
+        ],
+        "token": "88369286877379",
+        "messages": []
+    },
+    {
+        "room": "mariananaaa",
+        "users": [
+            "fff"
+        ],
+        "token": "62629118233508",
+        "messages": []
+    },
+    {
+        "room": "una sala",
+        "users": [
+            "mariana"
+        ],
+        "token": "5060315983305",
+        "messages": []
+    }
+]

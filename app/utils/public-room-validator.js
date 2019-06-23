@@ -18,8 +18,12 @@ function isValidRoom(token) {
 
 function addUserToRoom(user, room) {
     const rooms = getRooms()
-    rooms.find((r) => r.room === room).users.push(user)
-    fs.writeFileSync(roomsPath, JSON.stringify(rooms))
+    try {
+        rooms.find((r) => r.room === room).users.push(user)
+        fs.writeFileSync(roomsPath, JSON.stringify(rooms))
+    } catch (e) {
+        throw new Error('Room not found')
+    }
 }
 
 function getRoom(room) {
@@ -28,4 +32,16 @@ function getRoom(room) {
     return chatRoom
 }
 
-module.exports = {getRooms, isValidRoom, addUserToRoom, getRoom}
+function removeUser(room, user) {
+    const rooms = getRooms()
+    const chatRoom =rooms.find((r) => r.room === room)
+    
+    .users.splice()
+
+    const chatRoom = getRoom(room)
+    if (chatRoom) {
+        console.log(chatRoom)
+    }
+}
+
+module.exports = {getRooms, isValidRoom, addUserToRoom, getRoom, removeUser}

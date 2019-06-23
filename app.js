@@ -2,7 +2,8 @@ const express = require('express')
 const path = require('path')
 const http = require('http')
 const socketio = require('socket.io')
-var cors = require('cors');
+const cors = require('cors')
+const quickRoomValidator = require('./app/utils/public-room-validator')
 
 // const userRouter = require('./app/routes/userRouter')
 // const loginRouter = require('./app/routes/loginRouter')
@@ -15,26 +16,34 @@ const io = socketio(server)
 
 const quickRoomChat = io.of('/quickRoom');
 
-const port = process.env.PORT
+const port = 3000
 
 app.use(cors({origin: 'http://localhost:4200'}));
 app.use(homeRouter)
 app.use(quickRoomRouter)
 
-quickRoomChat.on('connect', (socket) => {
+quickRoomChat.on('connection', (socket) => {
+
     console.log('a user connected');
-    socket.on('join', (userRoom) => {
-        console.log(userRoom)
-        quickRoomChat.to(userRoom.room).emit('new-member', userRoom.user);
-        socket.join(userRoom.room)
+
+    socket.on('join', (joinData) => {
+        socket.user = joinData.user
+        socket.room = joinData.room
+        socket.join(joinData.room)
+        io.of('/quickRoom').to(joinData.room).emit('new-member', {room: joinData.room, user: joinData.user})
     })
+
+    socket.on('new-message', (data) => {
+        io.of('/quickRoom').to(data.room).emit('new-message', data.message)
+    })
+
     socket.on('disconnect', function(){
-        console.log('user disconnected');
-      });
-      socket.on('new-message', (message) => {
-          quickRoomChat.emit('new-message', message);
-      });
-  });
+        io.of('/quickRoom').to(socket.room).emit('member-disconnected', socket.user)
+        quickRoomValidator.removeUser(socket.room, socket.user)
+        console.log('user disconnected')
+    })
+
+  })
 
 
 

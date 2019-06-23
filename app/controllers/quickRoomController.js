@@ -41,14 +41,14 @@ quickRoomController.getRoom = (req, res) => {
 }
 
 quickRoomController.enterRoom =(req, res) => {
-    const user = req.query.nickname;
-    const room = req.query.room;
+    const user = req.body.user;
+    const room = req.body.room;
     try {
         roomValidator.addUserToRoom(user, room)
         const chatRoom = roomValidator.getRoom(room)
-        res.status(200).json({chatRoom})
+        res.status(200).json(chatRoom)
     } catch (e) {
-        res.status(500).json({e})
+        res.status(404).json({error: e.message})
     }
 }
 

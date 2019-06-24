@@ -33,7 +33,7 @@ quickRoomController.joinRoom =(req, res) => {
 }
 
 quickRoomController.getRoomByToken = (req, res) => {
-    const token = req.body.token
+    const token = req.query.token
     if (!token) {
         return res.status(400).send({error: 'missing required parameters'})
     }
@@ -41,6 +41,7 @@ quickRoomController.getRoomByToken = (req, res) => {
         const chatRoom = roomsHandler.getRoomByToken(token)
         res.status(200).json(chatRoom)
     } catch (e) {
+        console.log(e.message)
         res.status(404).json({error: e.message})
     }
 }

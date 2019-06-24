@@ -26,7 +26,7 @@ function getRoomByToken(token) {
     if (room) {
         return room
     } else {
-        throw new Error('Room not found')
+       throw new Error('Room not found')
     }
 }
 
@@ -88,6 +88,7 @@ function getMessages(room) {
  * @param message 
  */
 function addMessage(room, message) {
+    console.log(message)
     const rooms = getRooms()
     try {
         rooms.find((r) => r.room === room).messages.push(message)

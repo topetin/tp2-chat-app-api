@@ -125,16 +125,16 @@ function generateId() {
     return Math.round(Math.random() * (100000000000000 - 0) + 0)
 }
 
-/**
+/** VEEEER
  * private - dado un token devuelve una sala
  * @param token 
  */
-function isValidRoom(token) {
-    tokenString = token.toString()
-    const rooms = getRooms()
-    const roomExists = rooms.find((r) => r.token === tokenString)
-    return roomExists
-}
+// function isValidRoom(token) {
+//     tokenString = token.toString()
+//     const rooms = getRooms()
+//     const roomExists = rooms.find((r) => r.token === tokenString)
+//     return roomExists
+// }
 
 /**
  * private - elimina la sala si no hay mas usuarios conectados

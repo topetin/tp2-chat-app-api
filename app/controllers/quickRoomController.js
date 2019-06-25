@@ -41,7 +41,6 @@ quickRoomController.getRoomByToken = (req, res) => {
         const chatRoom = roomsHandler.getRoomByToken(token)
         res.status(200).json(chatRoom)
     } catch (e) {
-        console.log(e.message)
         res.status(404).json({error: e.message})
     }
 }

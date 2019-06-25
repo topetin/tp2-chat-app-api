@@ -38,6 +38,10 @@ quickRoomChat.on('connection', (socket) => {
         roomsHandler.addMessage(data.room, data.message)
     })
 
+    socket.on('typing', (data) => {
+        socket.to(data.room).emit('typing', data.user);
+    })
+
     socket.on('disconnect', function(){
         io.of('/quickRoom').to(socket.room).emit('member-disconnected', socket.user)
         roomsHandler.removeUser(socket.room, socket.user)

@@ -37,11 +37,16 @@ function getRoomByToken(token) {
  */
 function joinUserToRoom(user, room) {
     const rooms = getRooms()
-    try {
-        rooms.find((r) => r.room === room).users.push(user)
-        fs.writeFileSync(roomsPath, JSON.stringify(rooms, null, 4))
-    } catch (e) {
-        throw new Error('Room not found')
+    const chatRoom = rooms.find((r) => r.room === room)
+    if (!userExists(chatRoom, user)) {
+        try {
+            rooms.find((r) => r.room === room).users.push(user)
+            fs.writeFileSync(roomsPath, JSON.stringify(rooms, null, 4))
+        } catch (e) {
+            throw new Error('Room not found')
+        }
+    } else {
+        throw new Error('User already exists')
     }
 }
 
@@ -125,17 +130,6 @@ function generateId() {
     return Math.round(Math.random() * (100000000000000 - 0) + 0)
 }
 
-/** VEEEER
- * private - dado un token devuelve una sala
- * @param token 
- */
-// function isValidRoom(token) {
-//     tokenString = token.toString()
-//     const rooms = getRooms()
-//     const roomExists = rooms.find((r) => r.token === tokenString)
-//     return roomExists
-// }
-
 /**
  * private - elimina la sala si no hay mas usuarios conectados
  * @param room 
@@ -145,6 +139,15 @@ function removeRoom(room) {
     const index = rooms.findIndex((r) => r.room === room)
     rooms.splice(index, 1)
     fs.writeFileSync(roomsPath, JSON.stringify(rooms, null, 4))
+}
+
+/**
+ * private - valida si ya existe el nombre de usuario
+ * @param room 
+ * @param user 
+ */
+function userExists(room, user) {
+    return room.users.find((u) => u === user)
 }
 
 module.exports = { addChatRoom, getRoomByToken, joinUserToRoom, getRoomInFile, removeUser, getMessages, addMessage }

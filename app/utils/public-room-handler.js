@@ -26,7 +26,7 @@ function getRoomByToken(token) {
     if (room) {
         return room
     } else {
-       throw new Error('Room not found')
+        throw new Error('Room not found')
     }
 }
 
@@ -68,9 +68,12 @@ function getRoomInFile(room) {
 function removeUser(room, user) {
     let rooms = getRooms()
     let index = rooms.findIndex((r) => r.room === room)
-    let currentUsers = rooms[index].users.filter((value) => {
-        return value !== user;
-    })
+    let currentUsers = [];
+    if (index) {
+        currentUsers = rooms[index].users.filter((value) => {
+            return value !== user;
+        })
+    }
     if (currentUsers.length !== 0) {
         rooms[index].users = currentUsers;
         fs.writeFileSync(roomsPath, JSON.stringify(rooms, null, 4))

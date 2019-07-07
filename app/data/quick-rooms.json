@@ -22,5 +22,68 @@
                 "date": "Today at 8:04 PM"
             }
         ]
+    },
+    {
+        "room": "salas",
+        "users": [
+            {
+                "userName": "mari",
+                "userColor": null
+            }
+        ],
+        "token": "21808946212715",
+        "messages": []
+    },
+    {
+        "room": "salita",
+        "users": [
+            {
+                "userName": "mari",
+                "userColor": null
+            }
+        ],
+        "token": "90240333464701",
+        "messages": []
+    },
+    {
+        "room": "unasala",
+        "users": [
+            {
+                "userName": "mari",
+                "userColor": "#679598"
+            }
+        ],
+        "token": "65558137864654",
+        "messages": []
+    },
+    {
+        "room": "salisss",
+        "users": [
+            {
+                "userName": "mari",
+                "userColor": "#C79321"
+            },
+            {
+                "userName": "loooo",
+                "userColor": "#1A9370"
+            }
+        ],
+        "token": "73532604581922",
+        "messages": []
+    },
+    {
+        "room": "lasala",
+        "users": [
+            {
+                "userName": "wewe",
+                "userColor": "#78FBEE"
+            },
+            {
+                "userName": "wweqw",
+                "userColor": "#8961EE"
+            }
+        ],
+        "token": "88883032237592",
+        "messages": []
     }
 ]

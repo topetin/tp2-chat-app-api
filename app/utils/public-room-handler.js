@@ -41,7 +41,7 @@ function joinUserToRoom(user, room) {
         const chatRoom = rooms.find((r) => r.room === room)
         if (!userExists(chatRoom, user)) {
             try {
-                chatRoom.users.push(user)
+                chatRoom.users.push({userName: user, userColor: getRandomColor()})
                 fs.writeFileSync(roomsPath, JSON.stringify(rooms, null, 4))
             } catch (e) {
                 throw new Error('Room not found')
@@ -73,7 +73,7 @@ function removeUser(room, user) {
     let rooms = getRooms()
     let index = rooms.findIndex((r) => r.room === room)
     let currentUsers = rooms[index].users.filter((value) => {
-        return value !== user;
+        return value.userName !== user;
     })
     if (currentUsers.length !== 0) {
         rooms[index].users = currentUsers;
@@ -97,7 +97,6 @@ function getMessages(room) {
  * @param message 
  */
 function addMessage(room, message) {
-    console.log(message)
     const rooms = getRooms()
     try {
         rooms.find((r) => r.room === room).messages.push(message)
@@ -151,7 +150,19 @@ function removeRoom(room) {
  * @param user 
  */
 function userExists(room, user) {
-    return room.users.find((u) => u === user)
+    return room.users.find((u) => u.userName === user)
 }
 
-module.exports = { addChatRoom, getRoomByToken, joinUserToRoom, getRoomInFile, removeUser, getMessages, addMessage }
+/**
+ * public - genera un color random para el usuario
+ */
+function getRandomColor() {
+    var length = 6
+    var chars = '0123456789ABCDEF'
+    var hex = '#'
+    while(length--) hex += chars[(Math.random() * 16) | 0]
+    return hex
+  }
+
+
+module.exports = { addChatRoom, getRoomByToken, joinUserToRoom, getRoomInFile, removeUser, getMessages, addMessage, getRandomColor }

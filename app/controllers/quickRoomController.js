@@ -8,7 +8,8 @@ quickRoomController.createRoom = (req, res) => {
     if (!user || !room) {
        return res.status(400).send({error: 'missing required parameters'})
     }
-    const chat = new Chat(room, user)
+    let userColor = roomsHandler.getRandomColor()
+    const chat = new Chat(room, user, userColor)
     try {
         roomsHandler.addChatRoom(chat)
         res.status(200).send(chat)

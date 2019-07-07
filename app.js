@@ -4,8 +4,6 @@ const socketio = require('socket.io')
 const cors = require('cors')
 const roomsHandler = require('./app/utils/public-room-handler')
 
-// const userRouter = require('./app/routes/userRouter')
-// const loginRouter = require('./app/routes/loginRouter')
 const quickRoomRouter = require('./app/routes/quickRoomRouter.js')
 const homeRouter = require('./app/routes/homeRouter.js')
 
@@ -39,7 +37,12 @@ quickRoomChat.on('connection', (socket) => {
     })
 
     socket.on('typing', (data) => {
-        socket.to(data.room).emit('typing', data.user);
+        if (data.user === false) {
+            socket.to(data.room).emit('typing', false)
+        } else {
+            socket.to(data.room).emit('typing', data.user)
+        }
+        
     })
 
     socket.on('disconnect', function(){

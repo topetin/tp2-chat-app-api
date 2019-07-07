@@ -37,16 +37,20 @@ function getRoomByToken(token) {
  */
 function joinUserToRoom(user, room) {
     const rooms = getRooms()
-    const chatRoom = rooms.find((r) => r.room === room)
-    if (!userExists(chatRoom, user)) {
-        try {
-            rooms.find((r) => r.room === room).users.push(user)
-            fs.writeFileSync(roomsPath, JSON.stringify(rooms, null, 4))
-        } catch (e) {
-            throw new Error('Room not found')
+    if (rooms.length > 0) {
+        const chatRoom = rooms.find((r) => r.room === room)
+        if (!userExists(chatRoom, user)) {
+            try {
+                chatRoom.users.push(user)
+                fs.writeFileSync(roomsPath, JSON.stringify(rooms, null, 4))
+            } catch (e) {
+                throw new Error('Room not found')
+            }
+        } else {
+            throw new Error('User already exists')
         }
     } else {
-        throw new Error('User already exists')
+        throw new Error('No rooms to join')
     }
 }
 
@@ -68,12 +72,9 @@ function getRoomInFile(room) {
 function removeUser(room, user) {
     let rooms = getRooms()
     let index = rooms.findIndex((r) => r.room === room)
-    let currentUsers = [];
-    if (index) {
-        currentUsers = rooms[index].users.filter((value) => {
-            return value !== user;
-        })
-    }
+    let currentUsers = rooms[index].users.filter((value) => {
+        return value !== user;
+    })
     if (currentUsers.length !== 0) {
         rooms[index].users = currentUsers;
         fs.writeFileSync(roomsPath, JSON.stringify(rooms, null, 4))

@@ -13,7 +13,7 @@ const io = socketio(server)
 
 const quickRoomChat = io.of('/quickRoom');
 
-const port = 3000
+const port = process.env.PORT || 3000
 
 app.use(cors({origin: 'http://localhost:4200'}));
 app.use(homeRouter)

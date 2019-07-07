@@ -15,5 +15,8 @@
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
+  },
+  "engines": {
+    "node": "10.16.0"
   }
 }

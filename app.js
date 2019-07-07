@@ -28,12 +28,10 @@ quickRoomChat.on('connection', (socket) => {
         socket.room = joinData.room
         socket.join(joinData.room)
         io.of('/quickRoom').to(joinData.room).emit('new-member', {room: joinData.room, user: joinData.user})
-        socket.emit('previous-messages', {messages: roomsHandler.getMessages(joinData.room)})
     })
 
     socket.on('new-message', (data) => {
         io.of('/quickRoom').to(data.room).emit('new-message', data.message)
-        roomsHandler.addMessage(data.room, data.message)
     })
 
     socket.on('typing', (data) => {

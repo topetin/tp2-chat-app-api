@@ -1,16 +1,22 @@
 const fs = require('fs')
 const roomsPath = './app/data/quick-rooms.json'
+const userHandler = require('./user-handler')
+const User = require('../models/User')
+const Chat = require('../models/PublicChat')
 
 /**
  * public - recibe un PublicChat y la agrega al archivo de salas
  * @param chatRoom 
  */
-function addChatRoom(chatRoom) {
-    if (isRoomAvailable(chatRoom.getRoom())) {
-        chatRoom.setToken(generateId().toString())
+function addChatRoom(username, roomname) {
+    if (isRoomAvailable(roomname)) {
+        const user = new User(username, userHandler.getRandomColor())
+        const chat = new Chat(roomname, user)
+        chat.setToken(generateId().toString())
         const chatRooms = getRooms()
-        chatRooms.push(chatRoom)
+        chatRooms.push(chat)
         fs.writeFileSync(roomsPath, JSON.stringify(chatRooms, null, 4))
+        return chat;
     } else {
         throw new Error('Room is taken')
     }
@@ -32,16 +38,17 @@ function getRoomByToken(token) {
 
 /**
  * public - agrega un nuevo usuario a la sala
- * @param user 
+ * @param username
  * @param room 
  */
-function joinUserToRoom(user, room) {
+function joinUserToRoom(username, room) {
     const rooms = getRooms()
     if (rooms.length > 0) {
         const chatRoom = rooms.find((r) => r.room === room)
-        if (!userExists(chatRoom, user)) {
+        if (!userExists(chatRoom, username)) {
             try {
-                chatRoom.users.push({userName: user, userColor: getRandomColor()})
+                const user = new User(username, userHandler.getRandomColor())
+                chatRoom.users.push(user)
                 fs.writeFileSync(roomsPath, JSON.stringify(rooms, null, 4))
             } catch (e) {
                 throw new Error('Room not found')
@@ -72,8 +79,8 @@ function getRoomInFile(room) {
 function removeUser(room, user) {
     let rooms = getRooms()
     let index = rooms.findIndex((r) => r.room === room)
-    let currentUsers = rooms[index].users.filter((value) => {
-        return value.userName !== user;
+    let currentUsers = rooms[index].users.filter((u) => {
+        return u.name !== user;
     })
     if (currentUsers.length !== 0) {
         rooms[index].users = currentUsers;
@@ -83,28 +90,6 @@ function removeUser(room, user) {
     }
 }
 
-/**
- * public - devuelve los mensajes de una sala
- * @param room 
- */
-function getMessages(room) {
-    return getRoomInFile(room).messages
-}
-
-/**
- * public - agrega un nuevo mensaje a la lista de mensajes de la sala
- * @param room 
- * @param message 
- */
-function addMessage(room, message) {
-    const rooms = getRooms()
-    try {
-        rooms.find((r) => r.room === room).messages.push(message)
-        fs.writeFileSync(roomsPath, JSON.stringify(rooms, null, 4))
-    } catch (e) {
-        throw new Error('Unable to register message')
-    }
-}
 /**
  * private - devuelve las salas guardadas en el archivo
  */
@@ -150,19 +135,8 @@ function removeRoom(room) {
  * @param user 
  */
 function userExists(room, user) {
-    return room.users.find((u) => u.userName === user)
+    return room.users.find((u) => u.name === user)
 }
 
-/**
- * public - genera un color random para el usuario
- */
-function getRandomColor() {
-    var length = 6
-    var chars = '0123456789ABCDEF'
-    var hex = '#'
-    while(length--) hex += chars[(Math.random() * 16) | 0]
-    return hex
-  }
 
-
-module.exports = { addChatRoom, getRoomByToken, joinUserToRoom, getRoomInFile, removeUser, getMessages, addMessage, getRandomColor }
+module.exports = { addChatRoom, getRoomByToken, joinUserToRoom, getRoomInFile, removeUser }

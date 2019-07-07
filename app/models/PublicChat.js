@@ -1,10 +1,9 @@
 class PublicChat {
-    constructor(room, user, userColor) {
+    constructor(room, user) {
         this.room = room
         this.users = []
-        this.users.push({userName: user, userColor: userColor})
+        this.users.push(user)
         this.token = null
-        this.messages = []
     }
 
     getRoom() {
@@ -33,10 +32,6 @@ class PublicChat {
 
     getPublicChat() {
         return this
-    }
-
-    getMessages() {
-        return this.messages
     }
 }
 

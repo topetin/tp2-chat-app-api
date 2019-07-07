@@ -1,5 +1,4 @@
 const quickRoomController = {};
-const Chat = require('../models/PublicChat')
 const roomsHandler = require('../utils/public-room-handler')
 
 quickRoomController.createRoom = (req, res) => {
@@ -8,10 +7,8 @@ quickRoomController.createRoom = (req, res) => {
     if (!user || !room) {
        return res.status(400).send({error: 'missing required parameters'})
     }
-    let userColor = roomsHandler.getRandomColor()
-    const chat = new Chat(room, user, userColor)
     try {
-        roomsHandler.addChatRoom(chat)
+        const chat = roomsHandler.addChatRoom(user, room)
         res.status(200).send(chat)
     } catch(e) {
         res.status(400).send({error: e.message})

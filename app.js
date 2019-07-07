@@ -15,7 +15,7 @@ const quickRoomChat = io.of('/quickRoom');
 
 const port = process.env.PORT || 3000
 
-app.use(cors({origin: 'http://localhost:4200'}));
+app.use(cors({origin: 'https://tp2-chatapp.herokuapp.com'}));
 app.use(homeRouter)
 app.use(quickRoomRouter)
 
